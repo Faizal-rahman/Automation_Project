@@ -7,7 +7,7 @@ variable "vpc_cidr" {
 variable "default_tags" {
   type = map(string)
   default = {
-    "Owner" = "Smriti"
+    "Owner" = "GroupFour"
     "App"   = "Web"
   }
   description = "description"
@@ -28,7 +28,7 @@ variable "prefix" {
 
 variable "public_subnet_cidr_blocks" {
   type        = list(string)
-  default     = ["10.1.1.0/24", "10.1.2.0/24"]
+  default     = ["10.1.1.0/24", "10.1.2.0/24","10.1.3.0/24","10.1.4.0/24"]
   description = "description"
 }
 
