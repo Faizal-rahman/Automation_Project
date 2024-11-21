@@ -25,4 +25,8 @@ sudo apt-get install ansible
 
 ///
 
+Run the playbook
+
+///
 ansible-playbook -i output.json playbook.yaml
+///
