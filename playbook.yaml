@@ -3,7 +3,7 @@
   become: yes
 
   vars:
-    environment: "dev"  # Replace with "staging" or "prod" as needed
+    environment: "dev"  # Change accordingly to the environment working on
 
   tasks:
     - name: Update package lists
