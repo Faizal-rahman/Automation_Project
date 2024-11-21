@@ -2,9 +2,6 @@
   hosts: all
   become: yes
 
-  vars:
-    environment: "dev"  # Change accordingly to the environment working on
-
   tasks:
     - name: Update package lists
       apt:
