@@ -13,3 +13,16 @@ python dynamic_inventory.py # to run the script
 ///
 
 the script will generate a output.json file which will be used as inventory file
+
+After that in playbook change the environment accordingly, so that in the static webpage it displays the environment correctly.
+
+install ansible in host machine 
+
+///
+
+sudo apt-get update
+sudo apt-get install ansible
+
+///
+
+ansible-playbook -i output.json playbook.yaml
