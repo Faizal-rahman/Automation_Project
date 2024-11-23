@@ -91,7 +91,7 @@ resource "aws_eip" "vpc_eip" {
 
 resource "aws_nat_gateway" "nat_gateway" {
   count         = var.nat_gateway == true ? 1 : 0
-  subnet_id     = aws_subnet.public_subnet[1].id
+  subnet_id     = aws_subnet.public_subnet[0].id
   allocation_id = aws_eip.vpc_eip.id
   tags = merge(
     var.default_tags, {
