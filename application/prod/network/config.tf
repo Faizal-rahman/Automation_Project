@@ -10,7 +10,7 @@ terraform {
 terraform {
   backend "s3" {
     bucket         = "reham-prod-project"
-    key            = "project/prod/network/terraform.tfstate"
+    key            = "network/terraform.tfstate"
     region         = "us-east-1"
   }
 }

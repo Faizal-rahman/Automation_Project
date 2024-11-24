@@ -1,4 +1,4 @@
-# Step 10 - Add output variables
+
 output "public_vms_public_ips" {
   value = aws_instance.public_vms[*].public_ip
 }

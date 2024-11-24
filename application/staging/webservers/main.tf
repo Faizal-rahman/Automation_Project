@@ -1,12 +1,4 @@
 
-
-#----------------------------------------------------------
-# ACS730 - Week 3 - Terraform Introduction
-#
-# Build EC2 Instances
-#
-#----------------------------------------------------------
-
 #  Define the provider
 provider "aws" {
   region = "us-east-1"
@@ -55,9 +47,9 @@ locals {
 module "globalvars" {
   source = "../../../modules/globalvars"
 }
-
+# Load balancer
 resource "aws_elb" "web_elb" {
-  name = "web-elb"
+  name = "web-${var.env}-elb"
   security_groups = [
     "${aws_security_group.public_sg.id}"
   ]
@@ -81,7 +73,7 @@ resource "aws_elb" "web_elb" {
 }
 
 resource "aws_launch_configuration" "web" {
-  name_prefix                 = "web-"
+  name_prefix                 = "web--${var.env}-"
   image_id                    = data.aws_ami.latest_amazon_linux.id
   instance_type               = lookup(var.instance_type, var.env)
   key_name                    = aws_key_pair.web_key.key_name
@@ -98,7 +90,7 @@ resource "aws_launch_configuration" "web" {
     create_before_destroy = true
   }
 }
-
+# Auto Scaling
 resource "aws_autoscaling_group" "web" {
   name             = "${aws_launch_configuration.web.name}-asg"
   min_size         = 1
@@ -120,13 +112,13 @@ resource "aws_autoscaling_group" "web" {
   metrics_granularity = "1Minute"
   vpc_zone_identifier = data.terraform_remote_state.network.outputs.public_subnet_id
 
-  # Required to redeploy without an outage.
+  # Required to redeploy without an outage.-
   lifecycle {
     create_before_destroy = true
   }
   tag {
     key                 = "Name"
-    value               = "web"
+    value               = "web-${var.env}"
     propagate_at_launch = true
   }
 }
@@ -177,7 +169,7 @@ resource "aws_cloudwatch_metric_alarm" "web_cpu_alarm_down" {
 }
 
 
-# Reference subnet provisioned by 01-Networking 
+# Reference subnet provisioned
 resource "aws_instance" "public_vms" {
   count                       = 2
   ami                         = data.aws_ami.latest_amazon_linux.id
@@ -197,33 +189,12 @@ resource "aws_instance" "public_vms" {
 
   tags = merge(local.default_tags,
     {
-      "Name" = "${local.name_prefix}-Amazon-Linux"
+      "Name" = "${local.name_prefix}-Amazon-Linux-public-srv"
     }
   )
 }
 
-# Attach EBS volume
-resource "aws_volume_attachment" "public_ebs_att" {
-  count       = var.env == "prod" ? 2 : 0
-  device_name = "/dev/sdh"
-  volume_id   = aws_ebs_volume.public_web_ebs[count.index].id
-  instance_id = aws_instance.public_vms[count.index].id
-}
-
-# Create another EBS volume
-resource "aws_ebs_volume" "public_web_ebs" {
-  count             = var.env == "prod" ? 2 : 0
-  availability_zone = data.aws_subnet.subnets[count.index + 2].availability_zone
-  size              = 40
-
-  tags = merge(local.default_tags,
-    {
-      "Name" = "${local.name_prefix}-EBS"
-    }
-  )
-}
-
-# Reference subnet provisioned by 01-Networking 
+# Reference subnet provisioned
 resource "aws_instance" "private_web_vm" {
   ami                         = data.aws_ami.latest_amazon_linux.id
   instance_type               = lookup(var.instance_type, var.env)
@@ -246,35 +217,15 @@ resource "aws_instance" "private_web_vm" {
     create_before_destroy = true
   }
 
+
   tags = merge(local.default_tags,
     {
-      "Name" = "${local.name_prefix}-Amazon-Linux"
+      "Name" = "${local.name_prefix}-Amazon-Linux-private-web"
     }
   )
 }
 
-# Attach EBS volume
-resource "aws_volume_attachment" "private_web_ebs_att" {
-  count       = var.env == "prod" ? 1 : 0
-  device_name = "/dev/sdh"
-  volume_id   = aws_ebs_volume.private_web_ebs[0].id
-  instance_id = aws_instance.private_web_vm.id
-}
-
-# Create another EBS volume
-resource "aws_ebs_volume" "private_web_ebs" {
-  count             = var.env == "prod" ? 1 : 0
-  availability_zone = data.aws_subnet.subnets[0].availability_zone
-  size              = 40
-
-  tags = merge(local.default_tags,
-    {
-      "Name" = "${local.name_prefix}-EBS"
-    }
-  )
-}
-
-# Reference subnet provisioned by 01-Networking 
+# Reference subnet provisioned
 resource "aws_instance" "private_server_vm" {
   ami                         = data.aws_ami.latest_amazon_linux.id
   instance_type               = lookup(var.instance_type, var.env)
@@ -293,28 +244,7 @@ resource "aws_instance" "private_server_vm" {
 
   tags = merge(local.default_tags,
     {
-      "Name" = "${local.name_prefix}-Amazon-Linux"
-    }
-  )
-}
-
-# Attach EBS volume
-resource "aws_volume_attachment" "private_server_ebs_att" {
-  count       = var.env == "prod" ? 1 : 0
-  device_name = "/dev/sdh"
-  volume_id   = aws_ebs_volume.private_server_ebs[0].id
-  instance_id = aws_instance.private_server_vm.id
-}
-
-# Create another EBS volume
-resource "aws_ebs_volume" "private_server_ebs" {
-  count             = var.env == "prod" ? 1 : 0
-  availability_zone = data.aws_subnet.subnets[1].availability_zone
-  size              = 40
-
-  tags = merge(local.default_tags,
-    {
-      "Name" = "${local.name_prefix}-EBS"
+      "Name" = "${local.name_prefix}-Amazon-Linux-private-srv"
     }
   )
 }
@@ -429,9 +359,9 @@ resource "aws_security_group" "elastic_sg" {
   vpc_id = data.terraform_remote_state.network.outputs.vpc_id
 
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
     security_groups = [aws_security_group.public_sg.id]
   }
 
