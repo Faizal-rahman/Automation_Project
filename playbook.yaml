@@ -1,5 +1,5 @@
 - name: Install and Configure Apache Web Server
-  hosts: all
+  hosts: webservers
   become: yes
 
   tasks:
