@@ -57,6 +57,12 @@ resource "aws_instance" "public_vms" {
   subnet_id                   = data.terraform_remote_state.network.outputs.public_subnet_id[count.index + 2]
   vpc_security_group_ids      = [aws_security_group.public_sg.id]
   associate_public_ip_address = true
+  user_data = templatefile("${path.module}/install_httpd.sh.tpl",
+    {
+      env    = upper(var.env),
+      prefix = upper(local.prefix)
+    }
+  )
 
   root_block_device {
     encrypted = var.env == "prod" ? true : false
