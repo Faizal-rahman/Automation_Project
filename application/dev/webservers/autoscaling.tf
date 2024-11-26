@@ -1,3 +1,7 @@
+data "aws_iam_instance_profile" "labrole" {
+  name = "LabInstanceProfile"
+}
+
 resource "aws_security_group" "elastic_sg" {
   vpc_id = data.terraform_remote_state.network.outputs.vpc_id
 
@@ -29,6 +33,7 @@ resource "aws_launch_configuration" "web" {
   key_name                    = aws_key_pair.web_key.key_name
   security_groups             = ["${aws_security_group.elastic_sg.id}"]
   associate_public_ip_address = true
+  iam_instance_profile = data.aws_iam_instance_profile.labrole.name
   user_data = templatefile("${path.module}/install_httpd.sh.tpl",
     {
       env    = upper(var.env),
