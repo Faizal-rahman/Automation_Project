@@ -37,3 +37,24 @@ terraform init
 terraform plan
 terraform apply -auto-approve
 
+
+<!-- Deploy dev load balancer, EC2 instances, and auto scaling group. -->
+cd ../../dev/webservers/
+ssh-keygen -t rsa -f sshkey
+terraform init
+terraform plan
+terraform apply -auto-approve
+
+<!-- Deploy staging load balancer, EC2 instances, and auto scaling group. -->
+cd ../../staging/webservers/
+ssh-keygen -t rsa -f sshkey
+terraform init
+terraform plan
+terraform apply -auto-approve
+
+<!-- Deploy prod load balancer, EC2 instances, and auto scaling group. -->
+cd ../../prod/webservers/
+ssh-keygen -t rsa -f sshkey
+terraform init
+terraform plan
+terraform apply -auto-approve
