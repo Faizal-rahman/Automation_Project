@@ -74,7 +74,7 @@ resource "aws_instance" "public_vms" {
 
   tags = merge(local.default_tags,
     {
-      "Name" = "${local.name_prefix}-Amazon-Linux-public-srv"
+      "Name" = "${local.name_prefix}-public-webserver"
     }
   )
 }
@@ -105,7 +105,7 @@ resource "aws_instance" "private_web_vm" {
 
   tags = merge(local.default_tags,
     {
-      "Name" = "${local.name_prefix}-Amazon-Linux-private-web"
+      "Name" = "${local.name_prefix}-private-webserver"
     }
   )
 }
@@ -129,7 +129,7 @@ resource "aws_instance" "private_server_vm" {
 
   tags = merge(local.default_tags,
     {
-      "Name" = "${local.name_prefix}-Amazon-Linux-private-srv"
+      "Name" = "${local.name_prefix}-private-webserver"
     }
   )
 }
@@ -161,7 +161,7 @@ resource "aws_instance" "bastion" {
 
   tags = merge(local.default_tags,
     {
-      "Name" = "${local.name_prefix}-Amazon-Linux-bastion"
+      "Name" = "${local.name_prefix}-bastion"
     }
   )
 }
