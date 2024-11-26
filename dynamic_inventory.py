@@ -1,83 +1,90 @@
-import boto3
-import json
+#!/usr/bin/env python
+
 import subprocess
 import sys
+import boto3
+import json
 
+# Install dependencies
 def install_dependencies():
-    """Directly install boto3 and ansible."""
-    print("Installing boto3...")
+    # Install boto3
     subprocess.check_call([sys.executable, "-m", "pip", "install", "boto3"])
+    print("boto3 installed successfully.")
+    
+    # Install Ansible
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "ansible"])
+    print("Ansible installed successfully.")
 
-    print("Installing Ansible...")
-    subprocess.check_call(["sudo", "yum", "install", "-y", "ansible"])
+# Install dependencies
+install_dependencies()
 
-def get_subnet_ids_by_cidr(cidr_blocks):
-    """Fetch subnet IDs for given CIDR blocks."""
-    ec2 = boto3.client('ec2')
+# Create a session using your AWS credentials
+ec2_client = boto3.client('ec2')
+
+# CIDR blocks to search for
+cidr_blocks = ['10.1.3.0/24', '10.1.4.0/24']
+
+# Initialize the inventory
+inventory = {
+    "all": {
+        "hosts": {}
+    },
+    "webservers": {
+        "hosts": {}
+    }
+}
+
+# Function to find the subnets based on CIDR block
+def find_subnet_ids(cidr_blocks):
     subnet_ids = []
-    for cidr in cidr_blocks:
-        response = ec2.describe_subnets(Filters=[{'Name': 'cidr-block', 'Values': [cidr]}])
+    for cidr_block in cidr_blocks:
+        # Get the subnets matching the CIDR block
+        response = ec2_client.describe_subnets(
+            Filters=[{
+                'Name': 'cidrBlock',
+                'Values': [cidr_block]
+            }]
+        )
         for subnet in response['Subnets']:
             subnet_ids.append(subnet['SubnetId'])
     return subnet_ids
 
-def get_instances(filters):
-    """Fetch EC2 instances based on filters."""
-    try:
-        ec2 = boto3.client('ec2')
-        response = ec2.describe_instances(Filters=filters)
-        instances = []
-        for reservation in response['Reservations']:
-            for instance in reservation['Instances']:
-                if instance['State']['Name'] == 'running':  # Only running instances
-                    instances.append(instance)
-        return instances
-    except Exception as e:
-        print(f"Error fetching instances: {e}")
-        return []
+# Function to find instances based on subnet ids
+def find_instances_in_subnets(subnet_ids):
+    instances = ec2_client.describe_instances(
+        Filters=[{
+            'Name': 'subnet-id',
+            'Values': subnet_ids
+        }]
+    )
+    return instances
 
-def main():
-    # Install necessary dependencies
-    install_dependencies()
+# Find subnet IDs for the given CIDR blocks
+subnet_ids = find_subnet_ids(cidr_blocks)
+print(f"Subnet IDs obtained: {subnet_ids}")
 
-    # Define CIDR blocks for public subnet 3 and public subnet 4
-    cidr_blocks = ['10.1.3.0/24', '10.1.4.0/24']
-    
-    # Get subnet IDs for these CIDR blocks
-    subnet_ids = get_subnet_ids_by_cidr(cidr_blocks)
+# Find instances in the subnets
+instances = find_instances_in_subnets(subnet_ids)
 
-    # Update filters to include instances in these subnets
-    instance_filters = [
-        {'Name': 'subnet-id', 'Values': subnet_ids}
-    ]
-
-    instances = get_instances(instance_filters)
-    inventory = {
-        "all": {
-            "hosts": {}
-        },
-        "webservers": {
-            "hosts": {}
+# Iterate through instances and use InstanceId as the hostname
+for reservation in instances['Reservations']:
+    for instance in reservation['Instances']:
+        # Using InstanceId directly as hostname
+        instance_id = instance['InstanceId']
+        ip_address = instance['PrivateIpAddress']
+        
+        # Add instance info to inventory under its InstanceId
+        inventory["all"]["hosts"][instance_id] = {
+            "ansible_host": ip_address
         }
-    }
+        
+        # Add to 'webservers' group if the instance is tagged as a webserver
+        if 'webserver' in [tag['Value'] for tag in instance.get('Tags', [])]:
+            inventory["webservers"]["hosts"][instance_id] = None
 
-    for instance in instances:
-        # Use PrivateIpAddress instead of PublicIpAddress
-        ip_address = instance.get('PrivateIpAddress', 'N/A')  # Default to 'N/A' if no private IP
-        tags = instance.get('Tags', [])
-        hostname = next((tag['Value'] for tag in tags if tag['Key'] == 'Name'), 'Unknown')  # Default to 'Unknown' if no Name tag
+# Output the inventory in JSON format
+inventory_filename = "inventory.json"
+with open(inventory_filename, "w") as f:
+    json.dump(inventory, f, indent=2)
 
-        # Add the instance to the 'all' group
-        inventory['all']['hosts'][hostname] = {"ansible_host": ip_address}
-
-        # Add the instance to the 'webservers' group
-        inventory['webservers']['hosts'][hostname] = None  # No additional variables for now
-
-    # Save the inventory to a JSON file
-    with open('inventory.json', 'w') as outfile:
-        json.dump(inventory, outfile, indent=2)
-
-    print("Inventory file generated successfully!")
-
-if __name__ == '__main__':
-    main()
+print(f"Inventory file generated successfully! Saved as {inventory_filename}")
