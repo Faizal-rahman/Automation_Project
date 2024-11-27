@@ -2,39 +2,6 @@ data "aws_iam_instance_profile" "labrole" {
   name = "LabInstanceProfile"
 }
 
-resource "aws_security_group" "elastic_sg" {
-  vpc_id = data.terraform_remote_state.network.outputs.vpc_id
-
-  ingress {
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
-    security_groups = [aws_security_group.public_sg.id]
-  }
-
-  ingress {
-    description      = "SSH from everywhere"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = merge(local.default_tags,
-    {
-      "Name" = "${local.name_prefix}-elastic-sg"
-    }
-  )
-}
-
 resource "aws_launch_configuration" "web" {
   name_prefix                 = "web--${var.env}-"
   image_id                    = data.aws_ami.latest_amazon_linux.id
