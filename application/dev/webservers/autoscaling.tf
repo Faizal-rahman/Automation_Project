@@ -12,6 +12,15 @@ resource "aws_security_group" "elastic_sg" {
     security_groups = [aws_security_group.public_sg.id]
   }
 
+  ingress {
+    description      = "SSH from everywhere"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -37,7 +46,8 @@ resource "aws_launch_configuration" "web" {
   user_data = templatefile("${path.module}/install_httpd.sh.tpl",
     {
       env    = upper(var.env),
-      prefix = upper(local.prefix)
+      prefix = upper(local.prefix),
+      exclude_subnet = data.terraform_remote_state.network.outputs.public_subnet_id[2]
     }
   )
 
