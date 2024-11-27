@@ -49,7 +49,7 @@ resource "aws_launch_configuration" "web" {
 # Auto Scaling
 resource "aws_autoscaling_group" "web" {
   name             = "${aws_launch_configuration.web.name}-asg"
-  min_size         = 1
+  min_size         = 2
   desired_capacity = 2
   max_size         = 4
 
@@ -66,7 +66,11 @@ resource "aws_autoscaling_group" "web" {
     "GroupTotalInstances"
   ]
   metrics_granularity = "1Minute"
-  vpc_zone_identifier = data.terraform_remote_state.network.outputs.public_subnet_id
+  vpc_zone_identifier = [
+    data.terraform_remote_state.network.outputs.public_subnet_id[0],
+    data.terraform_remote_state.network.outputs.public_subnet_id[1],
+    data.terraform_remote_state.network.outputs.public_subnet_id[2]
+  ]
 
   # Required to redeploy without an outage.-
   lifecycle {
