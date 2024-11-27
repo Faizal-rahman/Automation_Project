@@ -2,30 +2,6 @@ data "aws_iam_instance_profile" "labrole" {
   name = "LabInstanceProfile"
 }
 
-resource "aws_security_group" "elastic_sg" {
-  vpc_id = data.terraform_remote_state.network.outputs.vpc_id
-
-  ingress {
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
-    security_groups = [aws_security_group.public_sg.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = merge(local.default_tags,
-    {
-      "Name" = "${local.name_prefix}-elastic-sg"
-    }
-  )
-}
-
 # Launch template
 resource "aws_launch_configuration" "web" {
   name_prefix                 = "web--${var.env}-"
@@ -50,7 +26,7 @@ resource "aws_launch_configuration" "web" {
 # Auto Scaling
 resource "aws_autoscaling_group" "web" {
   name             = "${aws_launch_configuration.web.name}-asg"
-  min_size         = 1
+  min_size         = 2
   desired_capacity = 2
   max_size         = 4
 
@@ -75,7 +51,7 @@ resource "aws_autoscaling_group" "web" {
   }
   tag {
     key                 = "Name"
-    value               = "web-${var.env}"
+    value               = "${local.name_prefix}-asg-webserver"
     propagate_at_launch = true
   }
 }
