@@ -71,7 +71,7 @@ for reservation in instances['Reservations']:
     for instance in reservation['Instances']:
         # Using InstanceId directly as hostname
         instance_id = instance['InstanceId']
-        ip_address = instance['PrivateIpAddress']
+        ip_address = instance['PublicIpAddress']
         
         # Add instance info to inventory under its InstanceId
         inventory["all"]["hosts"][instance_id] = {
