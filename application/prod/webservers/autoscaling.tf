@@ -59,7 +59,7 @@ resource "aws_launch_configuration" "web" {
 # Auto Scaling
 resource "aws_autoscaling_group" "web" {
   name             = "${aws_launch_configuration.web.name}-asg"
-  min_size         = 1
+  min_size         = 2
   desired_capacity = 2
   max_size         = 4
 
@@ -84,7 +84,7 @@ resource "aws_autoscaling_group" "web" {
   }
   tag {
     key                 = "Name"
-    value               = "web-${var.env}"
+    value               = "${local.name_prefix}-asg-webserver"
     propagate_at_launch = true
   }
 }

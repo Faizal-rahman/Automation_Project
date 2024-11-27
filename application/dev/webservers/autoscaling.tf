@@ -46,8 +46,7 @@ resource "aws_launch_configuration" "web" {
   user_data = templatefile("${path.module}/install_httpd.sh.tpl",
     {
       env    = upper(var.env),
-      prefix = upper(local.prefix),
-      exclude_subnet = data.terraform_remote_state.network.outputs.public_subnet_id[2]
+      prefix = upper(local.prefix)
     }
   )
 
@@ -88,7 +87,7 @@ resource "aws_autoscaling_group" "web" {
   }
   tag {
     key                 = "Name"
-    value               = "${local.name_prefix}-asg-webserver-${count.index + 1}"
+    value               = "${local.name_prefix}-asg-webserver"
     propagate_at_launch = true
   }
 }

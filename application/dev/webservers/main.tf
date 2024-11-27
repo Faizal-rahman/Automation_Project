@@ -68,7 +68,7 @@ resource "aws_instance" "public_vms" {
 
   tags = merge(local.default_tags,
     {
-      "Name" = "${local.name_prefix}-public-webserver-${count.index + 3}"
+      "Name" = "${local.name_prefix}-public-webserver-4"
     }
   )
 }

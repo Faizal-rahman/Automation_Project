@@ -74,7 +74,7 @@ resource "aws_instance" "public_vms" {
 
   tags = merge(local.default_tags,
     {
-      "Name" = "${local.name_prefix}-public-webserver"
+      "Name" = "${local.name_prefix}-public-webserver-4"
     }
   )
 }
@@ -105,7 +105,7 @@ resource "aws_instance" "private_web_vm" {
 
   tags = merge(local.default_tags,
     {
-      "Name" = "${local.name_prefix}-private-webserver"
+      "Name" = "${local.name_prefix}-private-webserver-5"
     }
   )
 }
@@ -129,7 +129,7 @@ resource "aws_instance" "private_server_vm" {
 
   tags = merge(local.default_tags,
     {
-      "Name" = "${local.name_prefix}-private-server"
+      "Name" = "${local.name_prefix}-private-VM6"
     }
   )
 }
