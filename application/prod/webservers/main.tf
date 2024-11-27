@@ -50,11 +50,11 @@ module "globalvars" {
 
 # Reference subnet provisioned
 resource "aws_instance" "public_vms" {
-  count                       = 2
+  count                       = 1
   ami                         = data.aws_ami.latest_amazon_linux.id
   instance_type               = lookup(var.instance_type, var.env)
   key_name                    = aws_key_pair.web_key.key_name
-  subnet_id                   = data.terraform_remote_state.network.outputs.public_subnet_id[count.index + 2]
+  subnet_id                   = data.terraform_remote_state.network.outputs.public_subnet_id[3]
   vpc_security_group_ids      = [aws_security_group.public_sg.id]
   associate_public_ip_address = true
   user_data = templatefile("${path.module}/install_httpd.sh.tpl",
