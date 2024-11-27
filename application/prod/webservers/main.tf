@@ -142,7 +142,7 @@ resource "aws_key_pair" "web_key" {
 
 resource "aws_instance" "bastion" {
   ami                         = data.aws_ami.latest_amazon_linux.id
-  instance_type               = "t2.micro"
+  instance_type               = lookup(var.instance_type, var.env)
   key_name                    = aws_key_pair.web_key.key_name
   subnet_id                   = data.terraform_remote_state.network.outputs.public_subnet_id[1]
   vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
