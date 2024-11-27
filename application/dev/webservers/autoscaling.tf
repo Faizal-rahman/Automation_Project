@@ -78,7 +78,7 @@ resource "aws_autoscaling_group" "web" {
   }
   tag {
     key                 = "Name"
-    value               = "web-${var.env}"
+    value               = "${local.name_prefix}-asg-webserver-${count.index + 1}"
     propagate_at_launch = true
   }
 }
