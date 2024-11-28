@@ -2,21 +2,25 @@
 
 import subprocess
 import sys
-import boto3
-import json
 
 # Install dependencies
 def install_dependencies():
-    # Install boto3
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "boto3"])
-    print("boto3 installed successfully.")
-    
-    # Install Ansible
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "ansible"])
-    print("Ansible installed successfully.")
+    required_packages = ["boto3", "ansible"]
+    for package in required_packages:
+        try:
+            # Install the package using pip
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+            print(f"{package} installed successfully.")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to install {package}. Error: {e}")
+            sys.exit(1)
 
-# Install dependencies
+# Install dependencies before importing
 install_dependencies()
+
+# Import dependencies
+import boto3
+import json
 
 # Create a session using your AWS credentials
 ec2_client = boto3.client('ec2')
@@ -71,7 +75,7 @@ for reservation in instances['Reservations']:
     for instance in reservation['Instances']:
         # Using InstanceId directly as hostname
         instance_id = instance['InstanceId']
-        ip_address = instance['PrivateIpAddress']
+        ip_address = instance.get('PublicIpAddress')  # Safeguard if no public IP exists
         
         # Add instance info to inventory under its InstanceId
         inventory["all"]["hosts"][instance_id] = {
