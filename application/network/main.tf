@@ -1,9 +1,9 @@
 module "globalvars" {
-  source = "../../../modules/globalvars"
+  source = "../../modules/globalvars"
 }
 
-module "vpc_dev" {
-  source                     = "../../../modules/network"
+module "vpc_stage" {
+  source                     = "../../modules/network"
   vpc_cidr                   = var.vpc_cidr
   public_subnet_cidr_blocks  = var.public_subnet_cidr_blocks
   private_subnet_cidr_blocks = var.private_subnet_cidr_blocks

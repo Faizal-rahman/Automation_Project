@@ -18,7 +18,7 @@ data "aws_ami" "latest_amazon_linux" {
 data "terraform_remote_state" "network" { // This is to use Outputs from Remote State
   backend = "s3"
   config = {
-    bucket = module.globalvars.s3_prod_backend_bucket  // Bucket from where to GET Terraform State
+    bucket = module.globalvars.s3_staging_backend_bucket  // Bucket from where to GET Terraform State
     key    = "network/terraform.tfstate" // Object name in the bucket to GET Terraform State
     region = "us-east-1"                 // Region where bucket created
   }
@@ -45,7 +45,7 @@ locals {
 
 # Retrieve global variables from the Terraform module
 module "globalvars" {
-  source = "../../../modules/globalvars"
+  source = "../../modules/globalvars"
 }
 
 # Reference subnet provisioned
