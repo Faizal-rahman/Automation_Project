@@ -1,4 +1,3 @@
-#Security group for Auto Scaling Group
 resource "aws_security_group" "elastic_sg" {
   vpc_id = data.terraform_remote_state.network.outputs.vpc_id
 
@@ -75,7 +74,7 @@ resource "aws_security_group" "public_sg" {
   )
 }
 
-# Bastion Security Group
+# Security Group
 resource "aws_security_group" "bastion_sg" {
   name        = "allow_ssh"
   description = "Allow SSH inbound traffic"
@@ -104,7 +103,6 @@ resource "aws_security_group" "bastion_sg" {
     }
   )
 }
-
 
 resource "aws_security_group" "private_web_sg" {
   name        = "allow_http_ssh"

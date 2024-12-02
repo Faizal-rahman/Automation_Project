@@ -2,6 +2,7 @@ data "aws_iam_instance_profile" "labrole" {
   name = "LabInstanceProfile"
 }
 
+# Launch template
 resource "aws_launch_configuration" "web" {
   name_prefix                 = "web--${var.env}-"
   image_id                    = data.aws_ami.latest_amazon_linux.id
@@ -42,11 +43,7 @@ resource "aws_autoscaling_group" "web" {
     "GroupTotalInstances"
   ]
   metrics_granularity = "1Minute"
-  vpc_zone_identifier = [
-    data.terraform_remote_state.network.outputs.public_subnet_id[0],
-    data.terraform_remote_state.network.outputs.public_subnet_id[1],
-    data.terraform_remote_state.network.outputs.public_subnet_id[2]
-  ]
+  vpc_zone_identifier = data.terraform_remote_state.network.outputs.public_subnet_id
 
   # Required to redeploy without an outage.-
   lifecycle {
