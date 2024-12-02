@@ -92,3 +92,6 @@ Run the playbook
 ansible-playbook -i output.json playbook.yaml
 ///
 >>>>>>> Ansible_Faizal
+
+///
+#Testing github actions
