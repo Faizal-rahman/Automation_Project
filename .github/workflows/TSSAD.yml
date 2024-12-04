@@ -36,7 +36,10 @@ jobs:
       - name: Run Trivy Scan
         run: |
           curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+          export PATH=$PATH:$(pwd)/bin  # Add the install directory to PATH
+          trivy --version              # Verify Trivy installation
           trivy config --severity HIGH,CRITICAL .
+
 
   terraform-deploy:
     name: Deploy Terraform
