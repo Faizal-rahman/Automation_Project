@@ -8,7 +8,7 @@ terraform {
 }
 
 terraform {
-  backend "s3" {
+backend "s3" {
     bucket         = "reham-staging-project"
     key            = "network/terraform.tfstate"
     region         = "us-east-1"
