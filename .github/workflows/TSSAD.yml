@@ -28,7 +28,7 @@ jobs:
       # Step 3: Run TFLint for linting Terraform code
       - name: Run TFLint
         run: |
-          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install.sh | bash
+          curl -sL https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
           tflint --init
           tflint
 
