@@ -1,0 +1,75 @@
+name: TSSAD
+
+on:
+  push:
+    branches:
+      - Staging  # Triggers on push to 'staging' branch
+  pull_request:
+    branches:
+      - Prod  # Triggers on PR to 'prod' branch
+  workflow_dispatch:  # Allows manual triggering of the workflow
+
+jobs:
+  terraform-security-scan:
+    name: Run Security Scans
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Install Terraform
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.6
+
+      # Step 3: Run TFLint for linting Terraform code
+      - name: Run TFLint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install.sh | bash
+          tflint --init
+          tflint
+
+      # Step 4: Run Trivy for configuration security scans
+      - name: Run Trivy Scan
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
+          trivy config --severity HIGH,CRITICAL .
+
+  terraform-deploy:
+    name: Deploy Terraform
+    runs-on: ubuntu-latest
+    needs: terraform-security-scan  # This job runs only after the security scan job
+    if: github.event_name == 'push'  # Only triggers on push events
+
+    steps:
+      # Step 1: Checkout repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Install Terraform
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.6
+
+      # Step 3: Configure AWS Credentials (hardcoded for now)
+      - name: Configure AWS Credentials
+        run: |
+          export AWS_ACCESS_KEY_ID=ASIAXHSQPKZ7TSK3COEW
+          export AWS_SECRET_ACCESS_KEY=BXmCv4yOpGhrwDYnMzWt3x+F0QrY1IRmCUhUdp4E
+          export AWS_REGION=us-east-1
+
+      # Step 4: Initialize Terraform
+      - name: Terraform Init
+        run: terraform init -backend-config="bucket=githubactionsassignment2" -backend-config="key=terraform/state" -backend-config="region=us-east-1"
+
+      # Step 5: Plan Terraform Deployment
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      # Step 6: Apply Terraform Deployment
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
