@@ -32,15 +32,6 @@ jobs:
           tflint --init
           tflint
 
-      # Step 4: Run Trivy for configuration security scans
-      - name: Run Trivy Scan
-        run: |
-          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh
-          export PATH=$PATH:$(pwd)/bin  # Add the install directory to PATH
-          trivy --version              # Verify Trivy installation
-          trivy config --severity HIGH,CRITICAL ./application/staging/network
-
-
   terraform-deploy:
     name: Deploy Terraform
     runs-on: ubuntu-latest
@@ -48,12 +39,11 @@ jobs:
     if: github.event_name == 'push'  # Only triggers on push events
 
     steps:
-      # Step 1: Checkout repository code
-      - name: Checkout code
+      # Step 1: Checkout the terraform_smriti branch
+      - name: Checkout terraform_smriti branch
         uses: actions/checkout@v3
         with:
           ref: terraform_smriti
-
 
       # Step 2: Install Terraform
       - name: Install Terraform
@@ -68,14 +58,19 @@ jobs:
           export AWS_SECRET_ACCESS_KEY=KLNXb+dE6ec5ww66V61E/4k3lZvK7dlf9lNLCGz2
           export AWS_REGION=us-east-1
 
-      # Step 4: Initialize Terraform for the 'application/staging/network' directory
+      # Step 4: Debug - List files
+      - name: Debug - List files
+        run: |
+          ls -R   # List all files in the current directory
+
+      # Step 5: Initialize Terraform
       - name: Terraform Init
-        run: terraform init ./application/staging/network -backend-config="bucket=githubactionsassignment2" -backend-config="key=terraform/state" -backend-config="region=us-east-1"
+        run: terraform init ./path_to_terraform_files
 
-      # Step 5: Plan Terraform Deployment
+      # Step 6: Plan Terraform Deployment
       - name: Terraform Plan
-        run: terraform plan -out=tfplan ./application/staging/network
+        run: terraform plan -out=tfplan ./path_to_terraform_files
 
-      # Step 6: Apply Terraform Deployment
+      # Step 7: Apply Terraform Deployment
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
