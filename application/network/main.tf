@@ -2,7 +2,10 @@ module "globalvars" {
   source = "../../modules/globalvars"
 }
 
-module "vpc_prod" {
+module "vpc" {
+  source = var.environment == "prod" ? "./modules/vpc_prod" : "./modules/vpc_stage"
+}
+
   source                     = "../../modules/network"
   vpc_cidr                   = var.vpc_cidr
   public_subnet_cidr_blocks  = var.public_subnet_cidr_blocks

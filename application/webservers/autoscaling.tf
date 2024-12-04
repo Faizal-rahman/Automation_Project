@@ -2,7 +2,10 @@ data "aws_iam_instance_profile" "labrole" {
   name = "LabInstanceProfile"
 }
 
+
+=======
 # Launch template
+
 resource "aws_launch_configuration" "web" {
   name_prefix                 = "web--${var.env}-"
   image_id                    = data.aws_ami.latest_amazon_linux.id
@@ -22,6 +25,9 @@ resource "aws_launch_configuration" "web" {
     create_before_destroy = true
   }
 }
+
+=======
+
 
 # Auto Scaling
 resource "aws_autoscaling_group" "web" {
