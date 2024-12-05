@@ -65,12 +65,13 @@ jobs:
 
       # Step 5: Initialize Terraform
       - name: Terraform Init
-        run: terraform init ./application/network
+        run: terraform init -chdir=./application/network
+
 
       # Step 6: Plan Terraform Deployment
       - name: Terraform Plan
-        run: terraform plan -out=tfplan ./application/network
+        run: terraform plan -out=tfplan -chdir=./application/network
 
       # Step 7: Apply Terraform Deployment
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -auto-approve tfplan -chdir=./application/network
