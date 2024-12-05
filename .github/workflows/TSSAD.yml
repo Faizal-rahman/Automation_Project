@@ -43,7 +43,7 @@ jobs:
       - name: Checkout terraform_smriti branch
         uses: actions/checkout@v3
         with:
-          ref: terraform_smriti
+          ref: Staging
 
       # Step 2: Install Terraform
       - name: Install Terraform
@@ -65,11 +65,11 @@ jobs:
 
       # Step 5: Initialize Terraform
       - name: Terraform Init
-        run: terraform init ./path_to_terraform_files
+        run: terraform init ./application/network
 
       # Step 6: Plan Terraform Deployment
       - name: Terraform Plan
-        run: terraform plan -out=tfplan ./path_to_terraform_files
+        run: terraform plan -out=tfplan ./application/network
 
       # Step 7: Apply Terraform Deployment
       - name: Terraform Apply
