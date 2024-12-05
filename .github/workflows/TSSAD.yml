@@ -29,8 +29,8 @@ jobs:
           tflint --init
           tflint
 
-  terraform-deploy:
-    name: Deploy Terraform
+  terraform-deploy-network:
+    name: Deploy Network Terraform
     runs-on: ubuntu-latest
     needs: terraform-security-scan
     if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
@@ -55,11 +55,46 @@ jobs:
       - name: Debug - List files
         run: ls -R
 
-      - name: Terraform Init
-        run: terraform -chdir=./modules/network init
+      - name: Terraform Init - Network
+        run: terraform -chdir=./application/network init
 
-      - name: Terraform Plan
-        run: terraform -chdir=./modules/network plan -out=tfplan
+      - name: Terraform Plan - Network
+        run: terraform -chdir=./application/network plan -out=tfplan
 
-      - name: Terraform Apply
-        run: terraform -chdir=./modules/network apply -auto-approve tfplan
+      - name: Terraform Apply - Network
+        run: terraform -chdir=./application/network apply -auto-approve tfplan
+
+  terraform-deploy-webserver:
+    name: Deploy Webserver Terraform
+    runs-on: ubuntu-latest
+    needs: terraform-security-scan
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout terraform
+        uses: actions/checkout@v3
+        with:
+          ref: Staging
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.6
+
+      - name: Configure AWS Credentials
+        run: |
+          export AWS_ACCESS_KEY_ID=ASIAXHSQPKZ7UYWMDBFH
+          export AWS_SECRET_ACCESS_KEY=4jI6/I1PYISCEvBcVNPl0kg2U5Oumtw3e2c5VgOY
+          export AWS_REGION=us-east-1
+
+      - name: Debug - List files
+        run: ls -R
+
+      - name: Terraform Init - Webserver
+        run: terraform -chdir=./application/webservers init
+
+      - name: Terraform Plan - Webserver
+        run: terraform -chdir=./application/webservers plan -out=tfplan
+
+      - name: Terraform Apply - Webserver
+        run: terraform -chdir=./application/webservers apply -auto-approve tfplan
