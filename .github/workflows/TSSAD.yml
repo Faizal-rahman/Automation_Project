@@ -56,13 +56,13 @@ jobs:
         run: ls -R
 
       - name: Terraform Init - Network
-        run: terraform -chdir=./application/network init
+        run: terraform -chdir=./modules/network init
 
       - name: Terraform Plan - Network
-        run: terraform -chdir=./application/network plan -out=tfplan
+        run: terraform -chdir=./modules/network plan -out=tfplan
 
       - name: Terraform Apply - Network
-        run: terraform -chdir=./application/network apply -auto-approve tfplan
+        run: terraform -chdir=./modules/network apply -auto-approve tfplan
 
   terraform-deploy-webserver:
     name: Deploy Webserver Terraform
