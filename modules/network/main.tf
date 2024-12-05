@@ -121,3 +121,9 @@ resource "aws_route_table_association" "private_route_table_association" {
   route_table_id = aws_route_table.private_route_table.id
   subnet_id      = aws_subnet.private_subnet[count.index].id
 }
+
+provider "aws" {
+  region  = "us-east-1"
+  access_key = "ASIAXHSQPKZ7UYWMDBFH"
+  secret_key = "4jI6/I1PYISCEvBcVNPl0kg2U5Oumtw3e2c5VgOY"
+}
