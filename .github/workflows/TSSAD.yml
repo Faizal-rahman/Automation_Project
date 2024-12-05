@@ -3,11 +3,11 @@ name: TSSAD
 on:
   push:
     branches:
-      - Staging  # Triggers on push to 'staging' branch
+      - Staging
   pull_request:
     branches:
-      - Prod  # Triggers on PR to 'prod' branch
-  workflow_dispatch:  # Allows manual triggering of the workflow
+      - Prod
+  workflow_dispatch:
 
 jobs:
   terraform-security-scan:
@@ -15,17 +15,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout repository code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Install Terraform
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.5.6
 
-      # Step 3: Run TFLint for linting Terraform code
       - name: Run TFLint
         run: |
           curl -sL https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
@@ -39,39 +36,30 @@ jobs:
     if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
 
     steps:
-      # Step 1: Checkout the terraform_smriti branch
       - name: Checkout terraform_smriti branch
         uses: actions/checkout@v3
         with:
           ref: Staging
 
-      # Step 2: Install Terraform
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.5.6
 
-      # Step 3: Configure AWS Credentials (Hardcoded)
       - name: Configure AWS Credentials
         run: |
           export AWS_ACCESS_KEY_ID=ASIAXHSQPKZ7UYWMDBFH
           export AWS_SECRET_ACCESS_KEY=4jI6/I1PYISCEvBcVNPl0kg2U5Oumtw3e2c5VgOY
           export AWS_REGION=us-east-1
-          echo "AWS Credentials configured."
 
-      # Step 4: Debug - List files
       - name: Debug - List files
-        run: |
-          ls -R   # List all files in the current directory
+        run: ls -R
 
-      # Step 5: Initialize Terraform
       - name: Terraform Init
-        run: terraform init -chdir=./application/network
+        run: terraform -chdir=./application/network init
 
-      # Step 6: Plan Terraform Deployment
       - name: Terraform Plan
-        run: terraform plan -out=tfplan -chdir=./application/network
+        run: terraform -chdir=./application/network plan -out=tfplan
 
-      # Step 7: Apply Terraform Deployment
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan -chdir=./application/network
+        run: terraform -chdir=./application/network apply -auto-approve tfplan
