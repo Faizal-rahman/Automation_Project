@@ -39,8 +39,8 @@ jobs:
     if: github.event_name == 'push'  # Only triggers on push events
 
     steps:
-      # Step 1: Checkout the terraform_smriti branch
-      - name: Checkout terraform_smriti branch
+      # Step 1: Checkout the terraform
+      - name: Checkout terraform
         uses: actions/checkout@v3
         with:
           ref: Staging
