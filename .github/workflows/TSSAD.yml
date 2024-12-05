@@ -35,12 +35,12 @@ jobs:
   terraform-deploy:
     name: Deploy Terraform
     runs-on: ubuntu-latest
-    needs: terraform-security-scan  # This job runs only after the security scan job
-    if: github.event_name == 'push'  # Only triggers on push events
+    needs: terraform-security-scan
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
 
     steps:
-      # Step 1: Checkout the terraform
-      - name: Checkout terraform
+      # Step 1: Checkout the terraform_smriti branch
+      - name: Checkout terraform_smriti branch
         uses: actions/checkout@v3
         with:
           ref: Staging
@@ -51,12 +51,13 @@ jobs:
         with:
           terraform_version: 1.5.6
 
-      # Step 3: Configure AWS Credentials (hardcoded for now)
+      # Step 3: Configure AWS Credentials (Hardcoded)
       - name: Configure AWS Credentials
         run: |
           export AWS_ACCESS_KEY_ID=ASIAXHSQPKZ7UYWMDBFH
           export AWS_SECRET_ACCESS_KEY=4jI6/I1PYISCEvBcVNPl0kg2U5Oumtw3e2c5VgOY
           export AWS_REGION=us-east-1
+          echo "AWS Credentials configured."
 
       # Step 4: Debug - List files
       - name: Debug - List files
@@ -66,7 +67,6 @@ jobs:
       # Step 5: Initialize Terraform
       - name: Terraform Init
         run: terraform init -chdir=./application/network
-
 
       # Step 6: Plan Terraform Deployment
       - name: Terraform Plan
