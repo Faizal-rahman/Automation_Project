@@ -4,7 +4,7 @@
   vars:
     apache_service: httpd
     apache_package: httpd
-    ansible_ssh_private_key_file: /home/ec2-user/environment/application/staging/webservers/sshkey
+    ansible_ssh_private_key_file: /home/ec2-user/environment/application/webservers/sshkey
 
   tasks:
     - name: Update package lists
