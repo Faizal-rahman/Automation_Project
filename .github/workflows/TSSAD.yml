@@ -54,8 +54,8 @@ jobs:
       # Step 3: Configure AWS Credentials (hardcoded for now)
       - name: Configure AWS Credentials
         run: |
-          export AWS_ACCESS_KEY_ID=ASIAXHSQPKZ745IOHRS2
-          export AWS_SECRET_ACCESS_KEY=KLNXb+dE6ec5ww66V61E/4k3lZvK7dlf9lNLCGz2
+          export AWS_ACCESS_KEY_ID=ASIAXHSQPKZ7UYWMDBFH
+          export AWS_SECRET_ACCESS_KEY=4jI6/I1PYISCEvBcVNPl0kg2U5Oumtw3e2c5VgOY
           export AWS_REGION=us-east-1
 
       # Step 4: Debug - List files
