@@ -49,7 +49,7 @@ jobs:
       - name: Configure AWS Credentials
         run: |
           export AWS_ACCESS_KEY_ID=ASIAXHSQPKZ72SOERI2X
-          export AWS_SECRET_ACCESS_KEY=d+D3IIpAwRs/eL7WKR53IQlv6a3q10ZEdGmdHJK7
+          export AWS_SECRET_ACCESS_KEY=fUerXDTTx2iNSO5vnEDI0bNWnfzyLMHqghT1x/HZ
           export AWS_REGION=us-east-1
 
       - name: Debug - List files
@@ -86,6 +86,14 @@ jobs:
           export AWS_ACCESS_KEY_ID=ASIAXHSQPKZ7UYWMDBFH
           export AWS_SECRET_ACCESS_KEY=4jI6/I1PYISCEvBcVNPl0kg2U5Oumtw3e2c5VgOY
           export AWS_REGION=us-east-1
+
+      - name: Configure SSH Key for Webserver
+        run: |
+          mkdir -p ~/.ssh
+          echo "SHA256:h76FrWHKkV7M7iXvKZBLfPuVjKeqo5WAfAPZz+8P79U my-key" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+
 
       - name: Debug - List files
         run: ls -R
