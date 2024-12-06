@@ -83,14 +83,14 @@ jobs:
 
       - name: Configure AWS Credentials
         run: |
-          export AWS_ACCESS_KEY_ID=ASIAXHSQPKZ7UYWMDBFH
-          export AWS_SECRET_ACCESS_KEY=4jI6/I1PYISCEvBcVNPl0kg2U5Oumtw3e2c5VgOY
+          export AWS_ACCESS_KEY_ID=ASIA3TRMDFYD6T2B4FWL
+          export AWS_SECRET_ACCESS_KEY=BNiArGtIYJOcfebwsE5eO5GLB1WBkCZquR+R67K5
           export AWS_REGION=us-east-1
 
       - name: Configure SSH Key for Webserver
         run: |
           mkdir -p ~/.ssh
-          echo "SHA256:h76FrWHKkV7M7iXvKZBLfPuVjKeqo5WAfAPZz+8P79U my-key" > ~/.ssh/id_rsa
+          echo "SHA256:yXalKXEuVtXiRagXFxgYA1rvdtTn51KadZ319IpJL54 my-key" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 
