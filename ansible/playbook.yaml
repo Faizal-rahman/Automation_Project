@@ -1,0 +1,37 @@
+- name: Install and Configure Apache Web Server
+  hosts: all
+  become: yes
+  vars:
+    apache_service: httpd
+    apache_package: httpd
+    ansible_ssh_private_key_file: /home/ec2-user/environment/application/webservers/sshkey
+
+  tasks:
+    - name: Update package lists
+      yum:
+        name: "*"
+        state: latest
+
+    - name: Install Apache HTTP Server
+      yum:
+        name: "{{ apache_package }}"
+        state: present
+
+    - name: Start and enable Apache service
+      service:
+        name: "{{ apache_service }}"
+        state: started
+        enabled: yes
+
+    - name: Create a simple HTML file
+      template:
+        src: index.html.j2
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Restart Apache service
+      service:
+        name: "{{ apache_service }}"
+        state: restarted
