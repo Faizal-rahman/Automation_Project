@@ -1,8 +1,11 @@
 
 #  Define the provider
-provider "aws" {
-  region     = "us-east-1"
-}
+ provider "aws" {
+    region  = "us-east-1"
+    access_key = "ASIAXHSQPKZ7XLECNLND"
+    secret_key = "fUerXDTTx2iNSO5vnEDI0bNWnfzyLMHqghT1x/HZ"
+    token      = "IQoJb3JpZ2luX2VjEHQaCXVzLXdlc3QtMiJHMEUCIQDDK0LSKtcynncDPwM2Yjc8wfQW10ligfhyva/0Jl2buQIgOvubn4Xw0ZkI58X48Nym7NAkRPvNwtyJb/S2QlMrYbUqrgIILRAAGgw0OTczMTEyNDE4NTUiDJtEB5RHpDTbtbKZ6iqLAosd9ppIBlB8xZifIJD0olwfZsgxQa1ILknFwPYowrqAVJHXbKfY6IGWxkzBqBT7yfYYBU0KGFZulF7GOo/zTGaH2MYNWs1p+/iiBPZrN2s8yPDD/u2cksz57wTUXyUpwyd5caeuzEfHN+JeGI9u3+4ZX+00GjVUK13hn50InqtT0TaIrQzgDiffKji+gTwHXqjC/YHkuzFvLDycZadVugW5L9+z/C4ZJfasAV9UQwxi8rg51UPBZA6j44KrdeiPOTqI4jmAbvsxn5+tdtdGUkuecwBZLGBTuz+GEmM1u/ogNwf54hM7LjtclC5waHS16mr0yuHlzwSj355ZtHZvU42/qrwaKSbNdsYX8DCS0cu6BjqdAd1fMsLZ/jc0gt4DX5kE8zWYpx37y25+Z8gzC6SflH5m4hOzoigwhzvtyrGuCJfXlvy7fDojMvliJiP8erlA7O6+lE6og0ifuWZFO57nJWya+fEBC7JEDRiRPmK3RdyCSfprVEr2np52IDAdBNis99Kk1GyeXWluV1D+rZlcZOLyuSWuhwvg+iD4cgFfwhznrAzPrTgIVH1CpE4daUQ="
+  }
 
 # Data source for AMI id
 data "aws_ami" "latest_amazon_linux" {
