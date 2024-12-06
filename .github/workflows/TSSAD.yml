@@ -48,8 +48,8 @@ jobs:
 
       - name: Configure AWS Credentials
         run: |
-          export AWS_ACCESS_KEY_ID=ASIAXHSQPKZ7SKUV2N4J
-          export AWS_SECRET_ACCESS_KEY=OqgWEtoGhZ9G3rxL47mhxIh3LJXjz6tMlzN26Hdk
+          export AWS_ACCESS_KEY_ID=ASIAXHSQPKZ72SOERI2X
+          export AWS_SECRET_ACCESS_KEY=d+D3IIpAwRs/eL7WKR53IQlv6a3q10ZEdGmdHJK7
           export AWS_REGION=us-east-1
 
       - name: Debug - List files
