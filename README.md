@@ -1,5 +1,4 @@
 # Infrastructure_Project
-<<<<<<< HEAD
          ___        ______     ____ _                 _  ___  
         / \ \      / / ___|   / ___| | ___  _   _  __| |/ _ \ 
        / _ \ \ /\ / /\___ \  | |   | |/ _ \| | | |/ _` | (_) |
@@ -59,36 +58,30 @@ ssh-keygen -t rsa -f sshkey
 terraform init
 terraform plan
 terraform apply -auto-approve
-=======
 
-dynamic_inventory.py #Python script to generate a dynamic inventory with only webserver 3 and webserver 4
+
+<!--Ansible -->
+
+cd into ansible folder 
+
+<!--Python script to generate a dynamic inventory with only ip addresses of instances which are in public subnet 3 and public subnet 4.-->
+dynamic_inventory.py 
+
 
 cd into the folder containing the script. 
 
-///
+<!-- to run the script-->
+python dynamic_inventory.py 
+  
 
-sudo yum install python3-pip # to install pip 
-pip install boto3 # to install boto3 for python to interact with amazon
-python dynamic_inventory.py # to run the script  
 
-///
-
-the script will generate a output.json file which will be used as inventory file
+<!--the script will install boto3 and ansible generate a inventory.json file which will be used as inventory file-->
 
 After that in playbook change the environment accordingly, so that in the static webpage it displays the environment correctly.
-
-install ansible in host machine 
-
-///
-
-sudo apt-get update
-sudo apt-get install ansible
-
-///
 
 Run the playbook
 
 ///
-ansible-playbook -i output.json playbook.yaml
+ansible-playbook -i inventory.json playbook.yaml
 ///
->>>>>>> Ansible_Faizal
+
