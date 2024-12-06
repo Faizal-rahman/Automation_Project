@@ -2,10 +2,7 @@
 #  Define the provider
 provider "aws" {
   region     = "us-east-1"
-  access_key = "ASIAXHSQPKZ7SKUV2N4J"
-  secret_key = "OqgWEtoGhZ9G3rxL47mhxIh3LJXjz6tMlzN26Hdk"
 }
-
 
 # Data source for AMI id
 data "aws_ami" "latest_amazon_linux" {
@@ -23,9 +20,6 @@ data "terraform_remote_state" "network" { // This is to use Outputs from Remote 
   config = {
 
     bucket = module.globalvars.s3_staging_backend_bucket  // Bucket from where to GET Terraform State
-=======
-    bucket = module.globalvars.s3_prod_backend_bucket  // Bucket from where to GET Terraform State
-
     key    = "network/terraform.tfstate" // Object name in the bucket to GET Terraform State
     region = "us-east-1"                 // Region where bucket created
   }

@@ -18,7 +18,8 @@ cat <<EOF > /var/www/html/index.html
     <li>Smriti Banjade</li>
     <li>Esha Nikhil Chawda</li>
   </ul>
-  <img src="https://s3.amazonaws.com/your-bucket-name/image.jpg" alt="Group Photo" style="max-width: 500px; margin-top: 20px;">
+  <p>Environment: <strong>${env}</strong></p>
+  <img src="https://group4seneca.s3.us-east-1.amazonaws.com/Bucketimg.jpeg" alt="Group Photo" style="max-width: 500px; margin-top: 20px;">
   <footer style="margin-top: 20px;">
     <p>Built by Terraform</p>
   </footer>
