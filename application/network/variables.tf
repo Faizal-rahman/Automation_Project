@@ -6,7 +6,7 @@ variable "vpc_cidr" {
 
 variable "env" {
   type        = string
-  default     = "dev"
+  default     = "prod"
   description = "Environment of the application"
 }
 

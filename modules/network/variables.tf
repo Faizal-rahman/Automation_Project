@@ -16,7 +16,7 @@ variable "default_tags" {
 
 variable "env" {
   type        = string
-  default     = "staging"
+  default     = "prod"
   description = "Environment of the application"
 }
 

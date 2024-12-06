@@ -2,7 +2,7 @@ module "globalvars" {
   source = "../../modules/globalvars"
 }
 
-module "vpc_dev" {
+module "vpc" {
   source                     = "../../modules/network"
   vpc_cidr                   = var.vpc_cidr
   public_subnet_cidr_blocks  = var.public_subnet_cidr_blocks
