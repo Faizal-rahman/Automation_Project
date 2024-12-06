@@ -122,9 +122,9 @@ resource "aws_route_table_association" "private_route_table_association" {
   subnet_id      = aws_subnet.private_subnet[count.index].id
 }
 
-provider "aws" {
-  region  = "us-east-1"
-  access_key = "ASIAXHSQPKZ7SKUV2N4J"
-  secret_key = "OqgWEtoGhZ9G3rxL47mhxIh3LJXjz6tMlzN26Hdk"
-  token      = "IQoJb3JpZ2luX2VjEGMaCXVzLXdlc3QtMiJHMEUCIQCM7AyKnxusPPtfrQF6YMNl1fP4kyySY9DBVYE4cwkGrgIgUeie32Wh/LyDO8Pjot7XRUssmb6cEx6VX0hxUG+vHncqrgIIHBAAGgw0OTczMTEyNDE4NTUiDGho+CexmLyECWIG5SqLAhYcNSa5aeEGxhOlVOFYHZI8/pLpgIysIVxeMdKIHNoFssyUo3ok2jlc+hMteZUmFR1uLqQW7ehCYfAhMUVWTSqDPaByP99WW2K1oNbbh6lHVG+vlnN7DnLpxAmHLoizcL/GlQFDGrEnk1XsItLkRf+61OBnWhV95tThhHtdZyhJVJ+J7kjEr9u8lyRs/9FLSnwh6+B0Yp7u1V/MjkcYgQaYaOhRKWbIy9tcNDRLXf6+n/WTYx6yTOXj9au5vauNczaWm8x2NV9w08kAgI1UikprawQmuAmJ/SOD4eVL1x5jaUupBo1ShJT4I7LdK569w4mw6jDYWjwIuP36u7+I4KIQjjK1Nu8bSoDb/TCJ+Me6BjqdAeHQ6A4KMqJJEQb/KCsxkGsMYX54gUFntYXhJjNAStp2l4ijbJLdMqsrAmZZ4pfjBA+fD/cwv00VLR2i73FQ7Zdab3PBHDcdi4TraBGAQynAUxUpt3Ky5v6N7uXRxoWs35b0lnWMvfbi6VTePwuqCTD0ayhvIm7PKzPMO5NM5WAaL92BG6LVW1OdRpoCB3rCC5Np5/l6sR54tVJuR/g="
-}
+# provider "aws" {
+#   region  = "us-east-1"
+#   access_key = "ASIAXHSQPKZ7SKUV2N4J"
+#   secret_key = "OqgWEtoGhZ9G3rxL47mhxIh3LJXjz6tMlzN26Hdk"
+#   token      = "IQoJb3JpZ2luX2VjEGMaCXVzLXdlc3QtMiJHMEUCIQCM7AyKnxusPPtfrQF6YMNl1fP4kyySY9DBVYE4cwkGrgIgUeie32Wh/LyDO8Pjot7XRUssmb6cEx6VX0hxUG+vHncqrgIIHBAAGgw0OTczMTEyNDE4NTUiDGho+CexmLyECWIG5SqLAhYcNSa5aeEGxhOlVOFYHZI8/pLpgIysIVxeMdKIHNoFssyUo3ok2jlc+hMteZUmFR1uLqQW7ehCYfAhMUVWTSqDPaByP99WW2K1oNbbh6lHVG+vlnN7DnLpxAmHLoizcL/GlQFDGrEnk1XsItLkRf+61OBnWhV95tThhHtdZyhJVJ+J7kjEr9u8lyRs/9FLSnwh6+B0Yp7u1V/MjkcYgQaYaOhRKWbIy9tcNDRLXf6+n/WTYx6yTOXj9au5vauNczaWm8x2NV9w08kAgI1UikprawQmuAmJ/SOD4eVL1x5jaUupBo1ShJT4I7LdK569w4mw6jDYWjwIuP36u7+I4KIQjjK1Nu8bSoDb/TCJ+Me6BjqdAeHQ6A4KMqJJEQb/KCsxkGsMYX54gUFntYXhJjNAStp2l4ijbJLdMqsrAmZZ4pfjBA+fD/cwv00VLR2i73FQ7Zdab3PBHDcdi4TraBGAQynAUxUpt3Ky5v6N7uXRxoWs35b0lnWMvfbi6VTePwuqCTD0ayhvIm7PKzPMO5NM5WAaL92BG6LVW1OdRpoCB3rCC5Np5/l6sR54tVJuR/g="
+# }
