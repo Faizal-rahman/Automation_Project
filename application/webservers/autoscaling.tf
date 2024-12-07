@@ -2,8 +2,6 @@ data "aws_iam_instance_profile" "labrole" {
   name = "LabInstanceProfile"
 }
 
-
-=======
 # Launch template
 
 resource "aws_launch_configuration" "web" {
@@ -25,8 +23,6 @@ resource "aws_launch_configuration" "web" {
     create_before_destroy = true
   }
 }
-
-=======
 
 
 # Auto Scaling

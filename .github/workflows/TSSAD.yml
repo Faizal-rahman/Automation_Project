@@ -1,0 +1,108 @@
+name: TSSAD
+
+on:
+  push:
+    branches:
+      - Staging
+  pull_request:
+    branches:
+      - Prod
+  workflow_dispatch:
+
+jobs:
+  terraform-security-scan:
+    name: Run Security Scans
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.6
+
+      - name: Run TFLint
+        run: |
+          curl -sL https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+          tflint --init
+          tflint
+
+  terraform-deploy-network:
+    name: Deploy Network Terraform
+    runs-on: ubuntu-latest
+    needs: terraform-security-scan
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout terraform
+        uses: actions/checkout@v3
+        with:
+          ref: Staging
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.6
+
+      - name: Configure AWS Credentials
+        run: |
+          export AWS_ACCESS_KEY_ID=ASIAXHSQPKZ72SOERI2X
+          export AWS_SECRET_ACCESS_KEY=fUerXDTTx2iNSO5vnEDI0bNWnfzyLMHqghT1x/HZ
+          export AWS_REGION=us-east-1
+
+      - name: Debug - List files
+        run: ls -R
+
+      - name: Terraform Init - Network
+        run: terraform -chdir=./modules/network init
+
+      - name: Terraform Plan - Network
+        run: terraform -chdir=./modules/network plan -out=tfplan
+
+      - name: Terraform Apply - Network
+        run: terraform -chdir=./modules/network apply -auto-approve tfplan
+
+  terraform-deploy-webserver:
+    name: Deploy Webserver Terraform
+    runs-on: ubuntu-latest
+    needs: terraform-security-scan
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout terraform
+        uses: actions/checkout@v3
+        with:
+          ref: Staging
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.6
+
+      - name: Configure AWS Credentials
+        run: |
+          export AWS_ACCESS_KEY_ID=ASIA3TRMDFYD6T2B4FWL
+          export AWS_SECRET_ACCESS_KEY=BNiArGtIYJOcfebwsE5eO5GLB1WBkCZquR+R67K5
+          export AWS_REGION=us-east-1
+
+      - name: Configure SSH Key for Webserver
+        run: |
+          mkdir -p ~/.ssh
+          echo "SHA256:yXalKXEuVtXiRagXFxgYA1rvdtTn51KadZ319IpJL54 my-key" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+
+
+      - name: Debug - List files
+        run: ls -R
+
+      - name: Terraform Init - Webserver
+        run: terraform -chdir=./application/webservers init
+
+      - name: Terraform Plan - Webserver
+        run: terraform -chdir=./application/webservers plan -out=tfplan
+
+      - name: Terraform Apply - Webserver
+        run: terraform -chdir=./application/webservers apply -auto-approve tfplan

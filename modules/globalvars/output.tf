@@ -18,5 +18,5 @@ output "s3_prod_backend_bucket" {
 }
 
 output "s3_staging_backend_bucket" {
-  value = "reham-staging-project"
+  value = "group4seneca"
 }

@@ -2,10 +2,6 @@
 variable "instance_type" {
   default = {
 
-    "prod"    = "t3.medium"
-=======
-    "prod"    = "t2.micro"
-
     "test"    = "t3.micro"
     "staging" = "t2.micro"
     "dev"     = "t2.micro"
@@ -17,18 +13,7 @@ variable "instance_type" {
 
 # Variable to signal the current environment 
 variable "env" {
-
   default     = "staging"
-=======
-  default     = "prod"
-
   type        = string
   description = "Deployment Environment"
 }
-
-
-
-
-
-=======
-

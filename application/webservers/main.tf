@@ -1,8 +1,17 @@
 
 #  Define the provider
-provider "aws" {
-  region = "us-east-1"
-}
+ provider "aws" {
+    region  = "us-east-1"
+    access_key = "ASIA3TRMDFYD6T2B4FWL"
+    secret_key = "BNiArGtIYJOcfebwsE5eO5GLB1WBkCZquR+R67K5"
+    token      = "IQoJb3JpZ2luX2VjEHUaCXVzLXdlc3QtMiJHMEUCIQD2bLaAVM+RmJHJv9oZKx9mAgSGwmKBixWAvKbgjfZHBQIgO/Z3KunXZbyDZAMDk6R44n9C6OQ77erEDoVhdouMUSsqrgIILhACGgw3OTc4ODI2NTgzMTEiDG0fNUxGyATHxJ4pDiqLAmdK2Wjyi2UocMYzvNLpu7P6qtz0Ms5VMiD+X5njEpg0RW4Tj1rrE9/jB4LtfWbRkEfOe8igyl1oBpk610a79OY3b1sqAI+vQLxYRgFbcAfVpuJRpjBSgkMV6fw6gkNq43F9hirEVleqUSgzQAqRFahiY9Y4CGQQQn2X9WVyoqGnei67QFQdDfRmpKcNHx5mCrpXdqSP5ZHY6mlqG5rIi2y6kmWR4ZUIlJ/sOkrhjGyi+UBm3dMviuBI27j+J5BhxpT/fMWpjTNBL1iDhKYKJoZzUBpskus2oJ5HB7/4PPEzM+Qkje4/U8Rg5r3i3NkkZ+BbL44+GTwj3Ni0QymZ5ttt4OuMFYidvm8SJDDt2su6BjqdAQJJv38kQFp1J7U8QUa5Posy4EwBN+eBKHnQvjLi3KvCaS7IBbPeXEO3NwCxx9zDtw5+jBnm9iu0NNOzBcJcsIFwsgHdUq6wMPeYvsYlX+xntnPta+xP40/+xytVmsfgZ17ZBBzoJ5Pd9wqmQ5yOEHjLltfD9a+3M065unYgz5LMi5Hlte1R4fFzjGSmqMfNSnrxSNDvRaLu48wjTVo="
+  }
+ - name: Configure SSH Key for Webserver
+        run: |
+          mkdir -p ~/.ssh
+          echo "SHA256:yXalKXEuVtXiRagXFxgYA1rvdtTn51KadZ319IpJL54 my-key" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 
 # Data source for AMI id
 data "aws_ami" "latest_amazon_linux" {
@@ -20,9 +29,6 @@ data "terraform_remote_state" "network" { // This is to use Outputs from Remote 
   config = {
 
     bucket = module.globalvars.s3_staging_backend_bucket  // Bucket from where to GET Terraform State
-=======
-    bucket = module.globalvars.s3_prod_backend_bucket  // Bucket from where to GET Terraform State
-
     key    = "network/terraform.tfstate" // Object name in the bucket to GET Terraform State
     region = "us-east-1"                 // Region where bucket created
   }
