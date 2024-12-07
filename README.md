@@ -11,54 +11,23 @@ sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
 sudo yum install -y terraform
 
-<!--Replace your s3 bucket on all config files-->
-/application/dev/network/config.tf
-/application/staging/network/config.tf
-/application/prod/network/config.tf
+<!--Replace your s3 bucket on config files-->
+/application/network/config.tf
 
-<!--Deploy dev VPC-->
-cd application/dev/network/
-
-terraform init
-terraform plan
-terraform apply -auto-approve
-
-<!--Deploy staging VPC-->
-cd ../../staging/network/
-
-terraform init
-terraform plan
-terraform apply -auto-approve
-
-<!--Deploy prod VPC-->
-cd ../../prod/network/
+<!--Deploy VPC-->
+cd application/network/
 
 terraform init
 terraform plan
 terraform apply -auto-approve
 
 
-<!-- Deploy dev load balancer, EC2 instances, and auto scaling group. -->
-cd ../../dev/webservers/
+<!-- Deploy  load balancer, EC2 instances, and auto scaling group. -->
+cd ../../webservers/
 ssh-keygen -t rsa -f sshkey
 terraform init
 terraform plan
 terraform apply -auto-approve
-
-<!-- Deploy staging load balancer, EC2 instances, and auto scaling group. -->
-cd ../../staging/webservers/
-ssh-keygen -t rsa -f sshkey
-terraform init
-terraform plan
-terraform apply -auto-approve
-
-<!-- Deploy prod load balancer, EC2 instances, and auto scaling group. -->
-cd ../../prod/webservers/
-ssh-keygen -t rsa -f sshkey
-terraform init
-terraform plan
-terraform apply -auto-approve
-
 
 <!--Ansible -->
 
@@ -84,6 +53,3 @@ Run the playbook
 ///
 ansible-playbook -i inventory.json playbook.yaml
 ///
-
-
-Testing actions again
